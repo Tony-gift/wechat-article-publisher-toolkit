@@ -20,6 +20,43 @@ python -m pip install -r requirements.txt
 
 参考 `.env.example` 配置环境变量。真实密码与 CA 证书应始终保存在仓库之外。
 
+## 连接代理服务器
+
+本仓库提供的是代理客户端，不包含代理服务端。使用前需要先取得一个兼容的 HTTPS 代理服务地址、Basic Auth 用户名和密码；如果服务使用自签名证书，还需要取得对应的 CA 证书文件。
+
+代理服务端至少需要提供以下接口：
+
+- `GET /health`：连通性检查；
+- `POST /upload-thumb`：上传封面图；
+- `POST /upload-inline`：上传正文图片；
+- `POST /draft-add`、`/draft-get`、`/draft-update`、`/draft-delete`：管理公众号草稿。
+
+在 PowerShell 中可这样配置当前终端：
+
+```powershell
+$env:MP_PROXY_URL = "https://proxy.example.com"
+$env:MP_PROXY_USERNAME = "publisher"
+$env:MP_PROXY_PASSWORD = "请替换为真实密码"
+$env:MP_PROXY_CA_CERT = "C:\证书\mp-proxy-ca.crt"
+```
+
+Linux 或 macOS：
+
+```bash
+export MP_PROXY_URL="https://proxy.example.com"
+export MP_PROXY_USERNAME="publisher"
+export MP_PROXY_PASSWORD="请替换为真实密码"
+export MP_PROXY_CA_CERT="/绝对路径/mp-proxy-ca.crt"
+```
+
+配置后先测试连接：
+
+```bash
+python -c "from mp_proxy import RemoteMP; mp=RemoteMP(); print(mp.health())"
+```
+
+若返回内容中包含 `"ok": true`，即可继续创建草稿。完整的接入条件、接口约定、证书处理、测试方法与故障排查见：[代理服务器连接指南](docs/代理服务器连接指南.md)。
+
 ## 安装 Codex Skill
 
 将 `skill/` 复制到 Codex 的 Skills 目录，并使用类似下面的目录名：
