@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+upload-cache.json
+.wechat-upload-cache.json
+*.tmp
+*.crt
+*.key
+*.pem
+article-ingest/
+article-assets/
+draft-output/

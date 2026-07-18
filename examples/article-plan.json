@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "source": "manuscript.md",
+  "title": "Example article",
+  "audience": "Community readers",
+  "tone": ["warm", "clear"],
+  "sections": [
+    {
+      "id": "intro",
+      "heading": "Opening",
+      "blocks": [
+        {
+          "id": "intro-p01",
+          "type": "paragraph",
+          "text": "A short, validated WeChat article body."
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "slot": "hero",
+      "anchor": {"after_block": "intro-p01"},
+      "purpose": "Establish the community setting",
+      "presentation": "full-width",
+      "caption": "Reading together"
+    }
+  ]
+}

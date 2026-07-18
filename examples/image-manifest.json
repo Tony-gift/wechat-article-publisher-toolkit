@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "article": "article.html",
+  "assets_root": ".",
+  "max_upload_bytes": 2097152,
+  "cover": {
+    "id": "cover",
+    "source_file": "cover.jpg",
+    "file": "cover.jpg",
+    "placement": "WeChat message cover; not inserted into the body",
+    "target": "cover",
+    "layout": "2.35:1 cover crop",
+    "alt": ""
+  },
+  "slots": [
+    {
+      "id": "hero",
+      "source_file": "hero.jpg",
+      "file": "hero.jpg",
+      "placement": "After the opening paragraph",
+      "target": "html-img",
+      "layout": "full-width",
+      "alt": "Members reading together",
+      "caption": "Reading together",
+      "expected_occurrences": 1
+    }
+  ]
+}

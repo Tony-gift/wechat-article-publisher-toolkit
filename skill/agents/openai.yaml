@@ -1,0 +1,7 @@
+interface:
+  display_name: "微信文章排版发布"
+  short_description: "解析 Word/Markdown 图文并自动编排为微信草稿"
+  brand_color: "#07C160"
+  default_prompt: "使用 $wechat-article-publisher 解析我提供的 Word 或 Markdown 图文，先确认图片位置与预览，再创建微信草稿。"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "source": "manuscript.md",
+  "title": "文章标题",
+  "audience": "目标读者",
+  "tone": ["温暖", "清晰"],
+  "sections": [
+    {
+      "id": "intro",
+      "heading": "开篇",
+      "blocks": [
+        {
+          "id": "intro-p01",
+          "type": "paragraph",
+          "text": "用户提供的第一段正文。"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "slot": "hero",
+      "anchor": {"after_block": "intro-p01"},
+      "purpose": "建立开篇氛围",
+      "presentation": "full-width",
+      "caption": "图片说明"
+    }
+  ]
+}

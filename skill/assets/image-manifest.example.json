@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "article": "article.html",
+  "assets_root": ".",
+  "max_upload_bytes": 2097152,
+  "cover": {
+    "id": "cover",
+    "source_file": "photos/cover-original.jpg",
+    "file": "processed/cover.jpg",
+    "placement": "公众号消息封面，不进入正文",
+    "target": "cover",
+    "layout": "2.35:1 cover crop",
+    "alt": ""
+  },
+  "slots": [
+    {
+      "id": "hero",
+      "source_file": "photos/group-original.jpg",
+      "file": "processed/hero.jpg",
+      "placement": "导语之后、第一节之前",
+      "target": "html-img",
+      "layout": "full-width",
+      "alt": "社团成员在园林中共读",
+      "caption": "花影与书页之间",
+      "expected_occurrences": 1,
+      "expected_ratio": 1.5,
+      "ratio_tolerance": 0.15
+    },
+    {
+      "id": "compare-before",
+      "source_file": "photos/before.jpg",
+      "file": "processed/before.jpg",
+      "placement": "协作故事交互卡片的前景层",
+      "target": "svg-foreignobject",
+      "layout": "compare-layer",
+      "alt": "活动筹备中的分工现场",
+      "expected_occurrences": 1
+    }
+  ]
+}
