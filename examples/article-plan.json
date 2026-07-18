@@ -1,18 +1,18 @@
 {
   "version": 1,
   "source": "manuscript.md",
-  "title": "Example article",
-  "audience": "Community readers",
-  "tone": ["warm", "clear"],
+  "title": "示例文章",
+  "audience": "社团读者",
+  "tone": ["温暖", "清晰"],
   "sections": [
     {
       "id": "intro",
-      "heading": "Opening",
+      "heading": "开篇",
       "blocks": [
         {
           "id": "intro-p01",
           "type": "paragraph",
-          "text": "A short, validated WeChat article body."
+          "text": "这是一段经过校验的微信公众号文章示例正文。"
         }
       ]
     }
@@ -21,9 +21,9 @@
     {
       "slot": "hero",
       "anchor": {"after_block": "intro-p01"},
-      "purpose": "Establish the community setting",
+      "purpose": "呈现社团活动氛围",
       "presentation": "full-width",
-      "caption": "Reading together"
+      "caption": "共读时光"
     }
   ]
 }
