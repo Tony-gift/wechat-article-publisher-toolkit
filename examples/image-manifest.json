@@ -7,7 +7,7 @@
     "id": "cover",
     "source_file": "cover.jpg",
     "file": "cover.jpg",
-    "placement": "WeChat message cover; not inserted into the body",
+    "placement": "微信公众号消息封面，不插入正文",
     "target": "cover",
     "layout": "2.35:1 cover crop",
     "alt": ""
@@ -17,11 +17,11 @@
       "id": "hero",
       "source_file": "hero.jpg",
       "file": "hero.jpg",
-      "placement": "After the opening paragraph",
+      "placement": "开篇段落之后",
       "target": "html-img",
       "layout": "full-width",
-      "alt": "Members reading together",
-      "caption": "Reading together",
+      "alt": "社团成员共读",
+      "caption": "共读时光",
       "expected_occurrences": 1
     }
   ]

@@ -1,19 +1,19 @@
-# Security
+# 安全说明
 
-## Never commit
+## 禁止提交
 
-- `MP_PROXY_PASSWORD` or other credentials;
-- private proxy URLs or usernames;
-- private CA certificates or TLS keys;
-- WeChat `media_id`, draft IDs, or upload caches;
-- unpublished manuscripts or personal photographs.
+- `MP_PROXY_PASSWORD` 或其他凭据；
+- 私有代理地址或用户名；
+- 私有 CA 证书或 TLS 密钥；
+- 微信 `media_id`、草稿 ID 或上传缓存；
+- 未公开稿件或个人照片。
 
-The included `.gitignore` blocks common local secret and artifact files. Run a secret scan before every release.
+仓库内的 `.gitignore` 已屏蔽常见的本地密钥及构建产物。每次发布前仍应执行敏感信息扫描。
 
 ## TLS
 
-Use a trusted public certificate or supply a narrowly scoped CA certificate with `MP_PROXY_CA_CERT`. Do not disable TLS verification.
+请使用受信任的公共证书，或通过 `MP_PROXY_CA_CERT` 指定仅用于该代理的 CA 证书。请勿关闭 TLS 校验。
 
-## Reporting
+## 问题报告
 
-Report security issues privately to the repository owner rather than opening a public issue.
+如发现安全问题，请私下联系仓库所有者，不要直接创建公开 Issue。交流微信：`tonyywwq`。
