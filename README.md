@@ -75,6 +75,24 @@ wechat-article-publisher/
 
 该 Skill 可导入 Markdown 或 DOCX、提取内嵌图片、生成文章规划与图片清单、校验微信公众号兼容的 HTML，并在获得明确确认后创建草稿。
 
+## 发布前规则校验
+
+微信公众号草稿标题按 UTF-8 字节数计算，最多 64 字节。规划文件中的 `title` 保留作品完整原题；当原题超限时，另设精简的 `draft_title` 作为草稿列表标题，正文标题仍展示完整原题。
+
+中文散文、评论等普通正文段落使用 CSS `text-indent:2em` 实现首行缩进。不要在段首手打全角空格，也不要用空段落或连续 `<br>` 撑开间距；标题、诗歌、标签和经过设计的开篇导语可不缩进。
+
+可在发布前运行严格校验：
+
+```bash
+python skill/scripts/validate_draft_layout.py \
+  examples/article-plan.json \
+  examples/article.html \
+  --mode prose \
+  --strict-warnings
+```
+
+校验会检查标题长度、精简标题、空段落、段首空格、全角空格、重复换行，以及正文的字号、行距、段距、对齐与首行缩进。仓库 CI 也会执行同一命令。
+
 ## 创建已校验的公众号草稿
 
 先准备包含语义化图片占位符的 HTML 排版源文件：

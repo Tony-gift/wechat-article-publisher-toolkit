@@ -103,13 +103,14 @@ Warn for SVG/SMIL, `foreignObject`, click animation, filters, SVG IDs/references
 5. After the plan is accepted, create processed derivatives only where required. Preserve originals and record `source_file` plus derivative `file`.
 6. Generate layout-source HTML and insert exact `{{IMAGE:slot-id}}` tokens at planned anchors. For SVG layers and CSS backgrounds, use the same slot ID convention.
 7. Run content-coverage and manifest validation; write plan and image lock hashes. Stop on errors.
-8. Render a phone-width preview using local derivative paths. Run layout-source and final-HTML validation. Report image/SVG counts, characters, UTF-8 bytes, errors, and warnings.
-9. Build an immutable preview payload containing HTML, plan/manifest lock hashes, title, theme, digest, author, cover hash, and all draft settings. Hash it and require explicit approval. Approval expires after 30 minutes and any changed byte invalidates it.
-10. After approval, open one authenticated proxy/API context and reuse its TLS session for health check, cache lookup, image upload, draft creation, and readback.
-11. Cache uploads by `endpoint-kind + SHA-256`, never by filename. Keep cover `media_id` and inline-image URL caches separate. Save cache atomically after every successful upload.
-12. Replace tokens by slot ID, not document order. Rewrite HTML `img`, SVG/XHTML images, and CSS backgrounds. Remove source-only markers and rerun Gate 2.
-13. Create the draft, read it back, and verify title, image-host count, unresolved token count, local URL count, placeholder/debug-text count, and source-content coverage.
-14. Return the draft `media_id`. Never publish, preview-send, or mass-send automatically.
+8. Validate draft metadata and typography with `scripts/validate_draft_layout.py`. Treat a draft title over 64 UTF-8 bytes as an error; preserve the full title in the article and require a separate approved `draft_title`. For Chinese prose, apply CSS `text-indent:2em` to ordinary body paragraphs; exempt headings, poetry, labels, and intentionally styled opening leads. Reject empty paragraphs, leading/trailing paragraph spaces, manual full-width indentation spaces, and repeated blank lines. Read [references/validation-rules.md](references/validation-rules.md) for prose and poetry spacing ranges.
+9. Render a phone-width preview using local derivative paths. Run layout-source and final-HTML validation. Report title bytes, paragraph-spacing warnings, image/SVG counts, characters, UTF-8 bytes, errors, and warnings.
+10. Build an immutable preview payload containing HTML, plan/manifest lock hashes, full title, effective draft title, title byte count, typography report, theme, digest, author, cover hash, and all draft settings. Hash it and require explicit approval. Approval expires after 30 minutes and any changed byte invalidates it.
+11. After approval, open one authenticated proxy/API context and reuse its TLS session for health check, cache lookup, image upload, draft creation, and readback.
+12. Cache uploads by `endpoint-kind + SHA-256`, never by filename. Keep cover `media_id` and inline-image URL caches separate. Save cache atomically after every successful upload.
+13. Replace tokens by slot ID, not document order. Rewrite HTML `img`, SVG/XHTML images, and CSS backgrounds. Remove source-only markers and rerun Gate 2.
+14. Create the draft with the effective `draft_title`, read it back, and verify title, image-host count, unresolved token count, local URL count, placeholder/debug-text count, and source-content coverage.
+15. Return the draft `media_id`. Never publish, preview-send, or mass-send automatically.
 
 ## Cache behavior
 

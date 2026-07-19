@@ -9,6 +9,7 @@ The user supplies prose and images. Build the plan internally before generating 
   "version": 1,
   "source": "manuscript.md",
   "title": "红楼社团年度小结",
+  "draft_title": "红楼社团年度小结",
   "audience": "社团成员与校园读者",
   "tone": ["温暖", "克制", "有文学感"],
   "sections": [
@@ -35,6 +36,7 @@ The user supplies prose and images. Build the plan internally before generating 
 
 ## Planning rules
 
+- Store the complete source title in `title`. Add `draft_title` only when the WeChat list title must be shortened to fit the 64-byte UTF-8 limit; never overwrite the complete literary title.
 - Preserve every substantive source block or explicitly mark it as merged, shortened, moved, or omitted with a reason.
 - Assign stable section and block IDs before placing images.
 - Use semantic anchors: `before_section`, `after_heading`, `before_block`, `after_block`, `gallery_in_section`, or a named SVG layer. Never use “image 3” or raw DOM indexes.
