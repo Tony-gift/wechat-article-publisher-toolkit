@@ -15,6 +15,7 @@ BODY_FONT_RANGE = (15.0, 18.0)
 BODY_LINE_HEIGHT_RANGE = (1.65, 2.20)
 BODY_MARGIN_RANGE = (12.0, 28.0)
 POETRY_LINE_HEIGHT_RANGE = (1.90, 2.40)
+INDENT_TOKEN = "__WECHAT_INDENT_2EM__"
 
 
 def css_map(style: str) -> dict[str, str]:
@@ -121,18 +122,24 @@ def validate(
         errors.append("实际草稿标题不能为空")
 
     parser = ParagraphParser()
-    parser.feed(html_text)
+    parser.feed(re.sub(r"(?i)&emsp;\s*&emsp;", INDENT_TOKEN, html_text))
     if parser.max_br_run >= 2 or re.search(r"(?:<br\s*/?>\s*){2,}", html_text, re.I):
         errors.append("HTML 含连续两个及以上 <br>，请用段距而不是空行制造留白")
 
     body_candidates = 0
     for record in parser.paragraphs:
         text = "".join(record["parts"])
-        visible = re.sub(r"\s+", " ", text)
+        has_entity_indent = text.startswith(INDENT_TOKEN)
+        text_without_indent = text.removeprefix(INDENT_TOKEN)
+        visible = re.sub(r"\s+", " ", text_without_indent)
         if not visible.strip():
             errors.append(f"第 {record['line']} 行存在空的 <{record['tag']}>")
             continue
-        if text != text.strip() or text.startswith("\u3000") or text.endswith("\u3000"):
+        if (
+            text_without_indent != text_without_indent.strip()
+            or text_without_indent.startswith("\u3000")
+            or text_without_indent.endswith("\u3000")
+        ):
             errors.append(f"第 {record['line']} 行段落含首尾空格或全角空格")
         if record["tag"] != "p":
             continue
@@ -185,11 +192,14 @@ def validate(
             indent = css_number(style.get("text-indent"), "em")
             lead_exception = record["attrs"].get("data-typography") == "lead"
             if lead_exception:
-                if indent not in {None, 0.0}:
+                if indent not in {None, 0.0} or has_entity_indent:
                     warnings.append(f"第 {record['line']} 行卷首引文不应再做首行缩进")
-            elif indent is None:
-                warnings.append(f"第 {record['line']} 行普通正文未设置 2em 首行缩进")
-            elif not 1.9 <= indent <= 2.1:
+            elif indent is None and not has_entity_indent:
+                warnings.append(
+                    f"第 {record['line']} 行普通正文未设置 2em 首行缩进；"
+                    "API 回读会清除 text-indent 时可使用两个 &emsp;"
+                )
+            elif indent is not None and not 1.9 <= indent <= 2.1:
                 warnings.append(
                     f"第 {record['line']} 行首行缩进为 {indent:g}em，建议 2em"
                 )
