@@ -9,7 +9,7 @@
 - `tools/publish_draft.py`：通用草稿创建命令，支持语义化图片占位符替换与 SHA-256 上传缓存。
 - `examples/`：最小可运行的文章、文章规划及图片清单示例。
 
-本仓库不会收录微信公众号凭据、真实代理地址、私有 CA 证书、上传缓存、草稿 ID、未公开稿件或个人照片。
+本仓库不会收录微信公众号凭据、真实代理地址、用户实际使用的证书、上传缓存、草稿 ID、未公开稿件或个人照片。
 
 ## 安装
 
@@ -18,11 +18,11 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-参考 `.env.example` 配置环境变量。真实密码与 CA 证书应始终保存在仓库之外。
+参考 `.env.example` 配置环境变量。真实密码不得写入仓库；自签名服务器的公开证书可放在本地项目的 `certs/` 目录，该目录中的证书文件默认不会被 Git 跟踪。
 
 ## 连接代理服务器
 
-本仓库提供的是代理客户端，不包含代理服务端。使用前需要先取得一个兼容的 HTTPS 代理服务地址、Basic Auth 用户名和密码；如果服务使用自签名证书，还需要取得对应的 CA 证书文件。
+本仓库提供的是代理客户端，不包含代理服务端。使用前需要先取得一个兼容的 HTTPS 代理服务地址、Basic Auth 用户名和密码；如果服务使用自签名证书，还需要取得用于校验服务器身份的 `.crt` 证书。
 
 代理服务端至少需要提供以下接口：
 
@@ -31,13 +31,21 @@ python -m pip install -r requirements.txt
 - `POST /upload-inline`：上传正文图片；
 - `POST /draft-add`、`/draft-get`、`/draft-update`、`/draft-delete`：管理公众号草稿。
 
-在 PowerShell 中可这样配置当前终端：
+推荐把取得的公开证书复制为：
+
+```text
+wechat-article-publisher-toolkit/
+└── certs/
+    └── mp-proxy.crt
+```
+
+然后在项目根目录打开 PowerShell，配置当前终端：
 
 ```powershell
 $env:MP_PROXY_URL = "https://proxy.example.com"
 $env:MP_PROXY_USERNAME = "publisher"
 $env:MP_PROXY_PASSWORD = "请替换为真实密码"
-$env:MP_PROXY_CA_CERT = "C:\证书\mp-proxy-ca.crt"
+$env:MP_PROXY_CA_CERT = ".\certs\mp-proxy.crt"
 ```
 
 Linux 或 macOS：
@@ -46,7 +54,7 @@ Linux 或 macOS：
 export MP_PROXY_URL="https://proxy.example.com"
 export MP_PROXY_USERNAME="publisher"
 export MP_PROXY_PASSWORD="请替换为真实密码"
-export MP_PROXY_CA_CERT="/绝对路径/mp-proxy-ca.crt"
+export MP_PROXY_CA_CERT="./certs/mp-proxy.crt"
 ```
 
 配置后先测试连接：
