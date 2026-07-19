@@ -15,6 +15,8 @@ Run `scripts/validate_draft_layout.py metadata.json article.html --source normal
 
 Block on empty `<p>` elements, leading/trailing ASCII or full-width spaces, whitespace-only paragraphs, two consecutive `<br>` elements, or more than one blank source line. Use CSS spacing instead of blank text.
 
+Block negative margins in final WeChat HTML. Mobile preview renderers can expand the left side while leaving the right side short. For a full-bleed title or cover block, put that block outside the padded body wrapper and keep `margin:0`.
+
 For mobile prose, default to:
 
 - body font size: 15-18 px, normally 16 px;

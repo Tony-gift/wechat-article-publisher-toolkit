@@ -86,7 +86,7 @@ Report unused candidate images without blocking. Produce a placement table order
 
 ### Gate 1: layout source
 
-Reject or remove external fonts/scripts, event handlers, ordinary HTML `class`/`id`, CSS variables, at-rules, grid, float, and `position:fixed|absolute|sticky`. Require inline-compatible structure that can survive WeChat sanitization.
+Reject or remove external fonts/scripts, event handlers, ordinary HTML `class`/`id`, CSS variables, at-rules, grid, float, negative margins, and `position:fixed|absolute|sticky`. Do not use negative horizontal margins to simulate full-bleed blocks: place full-width headers outside the padded body wrapper. Require inline-compatible structure that can survive WeChat sanitization.
 
 ### Gate 2: final HTML
 

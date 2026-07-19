@@ -136,6 +136,8 @@ def validate(
     parser.feed(re.sub(r"(?i)&emsp;\s*&emsp;", INDENT_TOKEN, html_text))
     if parser.max_br_run >= 2 or re.search(r"(?:<br\s*/?>\s*){2,}", html_text, re.I):
         errors.append("HTML 含连续两个及以上 <br>，请用段距而不是空行制造留白")
+    if re.search(r"margin(?:-left|-right)?\s*:[^;\"']*-\d", html_text, re.I):
+        errors.append("HTML 含负边距；微信手机端可能左右计算不一致，请用无内边距外层实现通栏")
 
     body_candidates = 0
     for record in parser.paragraphs:
