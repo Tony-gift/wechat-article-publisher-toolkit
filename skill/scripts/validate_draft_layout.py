@@ -75,9 +75,16 @@ class ParagraphParser(HTMLParser):
                 "tag": tag,
                 "attrs": dict(attrs),
                 "parts": [],
+                "indent_spacer": False,
                 "line": self.getpos()[0],
             }
             self.stack.append(record)
+        elif tag == "span" and self.stack:
+            style = css_map(dict(attrs).get("style") or "")
+            width = css_number(style.get("width"), "em")
+            if style.get("display") == "inline-block" and width is not None:
+                if 1.9 <= width <= 2.1:
+                    self.stack[-1]["indent_spacer"] = True
 
     def handle_endtag(self, tag: str) -> None:
         self.br_run = 0
@@ -130,7 +137,10 @@ def validate(
     for record in parser.paragraphs:
         text = "".join(record["parts"])
         has_entity_indent = text.startswith(INDENT_TOKEN)
+        has_spacer_indent = bool(record["indent_spacer"])
         text_without_indent = text.removeprefix(INDENT_TOKEN)
+        if has_spacer_indent:
+            text_without_indent = text_without_indent.removeprefix("\u00a0")
         visible = re.sub(r"\s+", " ", text_without_indent)
         if not visible.strip():
             errors.append(f"第 {record['line']} 行存在空的 <{record['tag']}>")
@@ -192,12 +202,12 @@ def validate(
             indent = css_number(style.get("text-indent"), "em")
             lead_exception = record["attrs"].get("data-typography") == "lead"
             if lead_exception:
-                if indent not in {None, 0.0} or has_entity_indent:
+                if indent not in {None, 0.0} or has_entity_indent or has_spacer_indent:
                     warnings.append(f"第 {record['line']} 行卷首引文不应再做首行缩进")
-            elif indent is None and not has_entity_indent:
+            elif indent is None and not has_entity_indent and not has_spacer_indent:
                 warnings.append(
                     f"第 {record['line']} 行普通正文未设置 2em 首行缩进；"
-                    "API 回读会清除 text-indent 时可使用两个 &emsp;"
+                    "API 回读会清除 text-indent/空白实体时可使用 2em 内联占位块"
                 )
             elif indent is not None and not 1.9 <= indent <= 2.1:
                 warnings.append(
