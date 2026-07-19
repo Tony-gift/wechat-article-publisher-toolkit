@@ -16,6 +16,7 @@ BODY_LINE_HEIGHT_RANGE = (1.65, 2.20)
 BODY_MARGIN_RANGE = (12.0, 28.0)
 POETRY_LINE_HEIGHT_RANGE = (1.90, 2.40)
 INDENT_TOKEN = "__WECHAT_INDENT_2EM__"
+BRAILLE_INDENT = "\u2800\u2800"
 
 
 def css_map(style: str) -> dict[str, str]:
@@ -142,6 +143,8 @@ def validate(
         has_entity_indent = text.startswith(INDENT_TOKEN)
         has_spacer_indent = bool(record["indent_spacer"])
         text_without_indent = text.removeprefix(INDENT_TOKEN)
+        has_braille_indent = text_without_indent.startswith(BRAILLE_INDENT)
+        text_without_indent = text_without_indent.removeprefix(BRAILLE_INDENT)
         if has_spacer_indent:
             text_without_indent = text_without_indent.removeprefix("\u00a0")
             text_without_indent = text_without_indent.removeprefix("\u200b")
@@ -206,12 +209,22 @@ def validate(
             indent = css_number(style.get("text-indent"), "em")
             lead_exception = record["attrs"].get("data-typography") == "lead"
             if lead_exception:
-                if indent not in {None, 0.0} or has_entity_indent or has_spacer_indent:
+                if (
+                    indent not in {None, 0.0}
+                    or has_entity_indent
+                    or has_spacer_indent
+                    or has_braille_indent
+                ):
                     warnings.append(f"第 {record['line']} 行卷首引文不应再做首行缩进")
-            elif indent is None and not has_entity_indent and not has_spacer_indent:
+            elif (
+                indent is None
+                and not has_entity_indent
+                and not has_spacer_indent
+                and not has_braille_indent
+            ):
                 warnings.append(
                     f"第 {record['line']} 行普通正文未设置 2em 首行缩进；"
-                    "API 回读会清除 text-indent/空白实体时可使用 2em 内联占位块"
+                    "API 清除所有视觉空节点时可使用两个 U+2800 盲文空白字符"
                 )
             elif indent is not None and not 1.9 <= indent <= 2.1:
                 warnings.append(

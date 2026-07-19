@@ -22,9 +22,9 @@ For mobile prose, default to:
 - paragraph bottom margin: 12-28 px, normally 16-20 px;
 - `text-align:justify` or `left`; avoid forced justification for short lines;
 - ordinary Chinese prose paragraphs use CSS `text-indent:2em` when the editor/API preserves it;
-- if exact API readback proves that `text-indent`, leading whitespace entities, and whitespace-only spans are stripped, use a leading `<span style="padding-left:2em;">&#8203;</span>` as the final-HTML fallback and validate that version before approval;
+- if exact API readback proves that `text-indent`, leading whitespace entities, and all visual-empty spans are stripped, use exactly two U+2800 BRAILLE PATTERN BLANK characters (`&#10240;&#10240;`) as the final-HTML fallback and validate that version before approval;
 - opening leads, headings, captions, labels, lists, quotations styled as cards, and poetry do not inherit prose indentation;
-- never type two literal ASCII or full-width spaces to imitate indentation; use CSS or the verified 2em padding compatibility fallback.
+- never type two literal ASCII or full-width spaces to imitate indentation; use CSS or the evidence-gated U+2800 compatibility fallback.
 
 For poetry, center only verse/stanza content, use 1.90-2.40 line height, and create 24-36 px stanza gaps with CSS. Do not apply prose indentation. Headings need more space above than below so they remain attached to the following paragraph.
 
