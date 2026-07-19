@@ -15,15 +15,18 @@ Run `scripts/validate_draft_layout.py metadata.json article.html --source normal
 
 Block on empty `<p>` elements, leading/trailing ASCII or full-width spaces, whitespace-only paragraphs, two consecutive `<br>` elements, or more than one blank source line. Use CSS spacing instead of blank text.
 
+Block negative margins in final WeChat HTML. Mobile preview renderers can expand the left side while leaving the right side short. For a full-bleed title or cover block, put that block outside the padded body wrapper and keep `margin:0`.
+
 For mobile prose, default to:
 
 - body font size: 15-18 px, normally 16 px;
 - unitless line height: 1.65-2.20, normally 1.85-1.95;
 - paragraph bottom margin: 12-28 px, normally 16-20 px;
 - `text-align:justify` or `left`; avoid forced justification for short lines;
-- ordinary Chinese prose paragraphs use CSS `text-indent:2em`;
+- ordinary Chinese prose paragraphs use CSS `text-indent:2em` when the editor/API preserves it;
+- if exact API readback proves that `text-indent`, leading whitespace entities, and all visual-empty spans are stripped, use exactly two U+2800 BRAILLE PATTERN BLANK characters (`&#10240;&#10240;`) as the final-HTML fallback and validate that version before approval;
 - opening leads, headings, captions, labels, lists, quotations styled as cards, and poetry do not inherit prose indentation;
-- never type two ASCII or full-width spaces to imitate indentation; indentation must remain CSS-controlled.
+- never type two literal ASCII or full-width spaces to imitate indentation; use CSS or the evidence-gated U+2800 compatibility fallback.
 
 For poetry, center only verse/stanza content, use 1.90-2.40 line height, and create 24-36 px stanza gaps with CSS. Do not apply prose indentation. Headings need more space above than below so they remain attached to the following paragraph.
 
