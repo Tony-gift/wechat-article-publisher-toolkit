@@ -82,9 +82,12 @@ class ParagraphParser(HTMLParser):
         elif tag == "span" and self.stack:
             style = css_map(dict(attrs).get("style") or "")
             width = css_number(style.get("width"), "em")
-            if style.get("display") == "inline-block" and width is not None:
-                if 1.9 <= width <= 2.1:
-                    self.stack[-1]["indent_spacer"] = True
+            padding = css_number(style.get("padding-left"), "em")
+            width_spacer = style.get("display") == "inline-block" and width is not None
+            if (width_spacer and 1.9 <= width <= 2.1) or (
+                padding is not None and 1.9 <= padding <= 2.1
+            ):
+                self.stack[-1]["indent_spacer"] = True
 
     def handle_endtag(self, tag: str) -> None:
         self.br_run = 0
@@ -141,6 +144,7 @@ def validate(
         text_without_indent = text.removeprefix(INDENT_TOKEN)
         if has_spacer_indent:
             text_without_indent = text_without_indent.removeprefix("\u00a0")
+            text_without_indent = text_without_indent.removeprefix("\u200b")
         visible = re.sub(r"\s+", " ", text_without_indent)
         if not visible.strip():
             errors.append(f"第 {record['line']} 行存在空的 <{record['tag']}>")
